@@ -7,7 +7,7 @@ import re
 _TARGET_SUM = 2020
 
 
-def product_of_target_pair(file_path: str):
+def product_of_target_pair(file_path: str) -> int:
     pair = _get_target_pair(file=file_path)
     multiply = lambda x, y: x * y
     return reduce(multiply, pair)
@@ -21,16 +21,20 @@ def _get_target_pair(file: str) -> Tuple[int, int]:
 
 
 def _get_pair_with_target_sum(
-    all_entries: List[int], target_sum: int = _TARGET_SUM
-) -> Tuple[int, int]:
+    all_entries: List[int]) -> Tuple[int, int]:
+    target_pair = (0,0)
     visited = list()
     for entry in all_entries:
         delta = _TARGET_SUM - entry
         if delta in visited:
-            return (entry, delta)
+            target_pair = (entry, delta)
+            break
         else:
             visited.append(entry)
-    return (0, 0)
+    if target_pair != (0,0):
+       return target_pair
+    else:
+        raise RuntimeError("No target pair found in input!")
 
 
 start = time.perf_counter()
