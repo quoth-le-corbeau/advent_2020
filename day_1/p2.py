@@ -35,7 +35,6 @@ def _get_triple_with_target_sum(all_entries: List[int]) -> Tuple[int, int, int]:
     raise RuntimeError("No matching Triple found")
 
 
-
 start = time.perf_counter()
 print(product_of_target_triple("eg.txt"))
 print(f"TEST -> Elapsed {time.perf_counter() - start:2.4f} seconds.")
