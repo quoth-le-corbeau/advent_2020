@@ -17,14 +17,14 @@ def _get_target_pair(file: str) -> Tuple[int, int]:
     with open(pathlib.Path(__file__).parent / file, "r") as puzzle_input:
         lines = puzzle_input.read()
         all_entries = list(map(int, re.findall(r"\d+", lines)))
-        return _get_pair_with_target_sum(all_entries=all_entries)
+        return _get_pair_with_target_sum(entries=all_entries)
 
 
 def _get_pair_with_target_sum(
-    all_entries: List[int], target_sum: int = _TARGET_SUM
+    entries: List[int], target_sum: int = _TARGET_SUM
 ) -> Tuple[int, int]:
     visited = list()
-    for entry in all_entries:
+    for entry in entries:
         delta = target_sum - entry
         if delta in visited:
             return (entry, delta)

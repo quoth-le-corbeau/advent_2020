@@ -3,6 +3,10 @@ from functools import reduce
 import time
 import pathlib
 import re
+import os
+import sys
+
+import day_1.p1
 
 _TARGET_SUM = 2020
 
@@ -22,26 +26,14 @@ def _get_target_triple(file: str) -> Tuple[int, int, int]:
 def _get_triple_with_target_sum(all_entries: List[int]) -> Tuple[int, int, int]:
     for i, entry in enumerate(all_entries):
         try:
-            coupled_pair = _get_pair_with_target_sum(
-                all_entries=all_entries[i + 1 :], target_sum=_TARGET_SUM - entry
+            coupled_pair = day_1.p1._get_pair_with_target_sum(
+                entries=all_entries[i + 1 :], target_sum=_TARGET_SUM - entry
             )
             return entry, coupled_pair[0], coupled_pair[1]
         except RuntimeError:
             continue
     raise RuntimeError("No matching Triple found")
 
-
-def _get_pair_with_target_sum(
-    all_entries: List[int], target_sum: int = _TARGET_SUM
-) -> Tuple[int, int]:
-    visited = list()
-    for entry in all_entries:
-        delta = target_sum - entry
-        if delta in visited:
-            return (entry, delta)
-        else:
-            visited.append(entry)
-    raise RuntimeError("No target pair found in input!")
 
 
 start = time.perf_counter()
