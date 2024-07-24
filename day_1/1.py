@@ -21,20 +21,16 @@ def _get_target_pair(file: str) -> Tuple[int, int]:
 
 
 def _get_pair_with_target_sum(
-    all_entries: List[int]) -> Tuple[int, int]:
-    target_pair = (0,0)
+    all_entries: List[int], target_sum: int = _TARGET_SUM
+) -> Tuple[int, int]:
     visited = list()
     for entry in all_entries:
-        delta = _TARGET_SUM - entry
+        delta = target_sum - entry
         if delta in visited:
-            target_pair = (entry, delta)
-            break
+            return (entry, delta)
         else:
             visited.append(entry)
-    if target_pair != (0,0):
-       return target_pair
-    else:
-        raise RuntimeError("No target pair found in input!")
+    raise RuntimeError("No target pair found in input!")
 
 
 start = time.perf_counter()
