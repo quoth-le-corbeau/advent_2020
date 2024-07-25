@@ -4,6 +4,7 @@ import pathlib
 
 _TREE = "#"
 
+
 def count_trees_on_trajectory(file_path: str) -> int:
     i = 0
     j = 0
@@ -17,7 +18,7 @@ def count_trees_on_trajectory(file_path: str) -> int:
         current_index: int = (last_index + 3) % grid_line_length
         grid_point = grid[j][current_index]
         if grid_point == _TREE:
-            tree_count += 1 
+            tree_count += 1
         i = current_index
 
     return tree_count
