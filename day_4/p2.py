@@ -71,8 +71,7 @@ def _passport_is_valid(passport: Dict[str, str]) -> bool:
     try:
         value = int(height[:-2])
     except ValueError:
-        print(f"{height[:-2]=}")
-        raise ValueError
+        raise InvalidPassport
     assert units in ["in", "cm"]
     if units == "in" and (value < 59 or value > 76):
         return False
