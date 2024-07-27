@@ -6,7 +6,6 @@ import pathlib
 
 def get_highest_seat_id(file_path: str) -> int:
     boarding_passes = _get_boarding_passes(file=file_path)
-    print(f"{boarding_passes=}")
     seat_ids: List[int] = list()
     for boarding_pass in boarding_passes:
         row_number = _do_specificied_binary_search(
@@ -16,7 +15,6 @@ def get_highest_seat_id(file_path: str) -> int:
             take_lower_signifier="F",
             take_upper_signifier="B",
         )
-        print(f"{row_number=}")
         column_number = _do_specificied_binary_search(
             binary_code=boarding_pass[1],
             starting_range_size=8,
@@ -24,12 +22,10 @@ def get_highest_seat_id(file_path: str) -> int:
             take_lower_signifier="L",
             take_upper_signifier="R",
         )
-        print(f"{column_number=}")
         seat_ids.append(row_number * 8 + column_number)
     return max(seat_ids)
 
 
-# TODO: research use of overload in case relevant
 def _do_specificied_binary_search(
     binary_code: str,
     starting_range_size: int,
@@ -37,7 +33,6 @@ def _do_specificied_binary_search(
     take_upper_signifier: str,
     take_lower_signifier: str,
 ) -> int:
-    assert len(binary_code) in [3, 7]
     lower_bound = 0
     upper_bound = lower_bound + starting_range_size - 1
     i = 0
@@ -50,13 +45,10 @@ def _do_specificied_binary_search(
         elif char == take_lower_signifier:
             upper_bound = lower_bound + range_size - 1
         i += 1
-
     char = binary_code[i]
     if char == take_upper_signifier:
-        print(f"taking upper bound: {upper_bound}")
         return upper_bound
     elif char == take_lower_signifier:
-        print(f"taking lower bound: {lower_bound}")
         return lower_bound
     else:
         raise RuntimeError("Incorrect take_upper or take_lower identifier!")
