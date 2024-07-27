@@ -3,7 +3,6 @@ import time
 import pathlib
 
 
-
 def get_highest_seat_id(file_path: str) -> int:
     boarding_passes = _get_boarding_passes(file=file_path)
     seat_ids: List[int] = list()

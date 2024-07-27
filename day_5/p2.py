@@ -3,10 +3,26 @@ import time
 import pathlib
 
 
-
-def find_my_seat_id(file_path: str) -> List[Tuple[int, int]]:
+def find_my_seat_id(file_path: str) -> int:
     boarding_passes = _get_boarding_passes(file=file_path)
-    seat_ids: List[Tuple[int, int]] = list()
+    sorted_seat_ids = _get_sorted_seat_ids(boarding_passes=boarding_passes)
+    sorted_seat_id_pairs = list(zip(sorted_seat_ids[:-1], sorted_seat_ids[1:]))
+    target_pair = (0, 0)
+    for sorted_pair in sorted_seat_id_pairs:
+        if tuple_diff(sorted_pair=sorted_pair) == 2:
+            target_pair = sorted_pair
+        else:
+            continue
+    return int((target_pair[0] + target_pair[1]) / 2)
+
+
+def tuple_diff(sorted_pair: Tuple[int, int]) -> int:
+    x, y = sorted_pair
+    return y - x
+
+
+def _get_sorted_seat_ids(boarding_passes: List[Tuple[str, str]]) -> List[int]:
+    seat_ids: List[int] = list()
     for boarding_pass in boarding_passes:
         row_number = _do_specificied_binary_search(
             binary_code=boarding_pass[0],
@@ -22,8 +38,8 @@ def find_my_seat_id(file_path: str) -> List[Tuple[int, int]]:
             take_lower_signifier="L",
             take_upper_signifier="R",
         )
-        seat_ids.append((row_number, column_number))
-    return seat_ids
+        seat_ids.append(row_number * 8 + column_number)
+    return sorted(seat_ids)
 
 
 def _do_specificied_binary_search(
@@ -67,6 +83,6 @@ start = time.perf_counter()
 print(find_my_seat_id("eg.txt"))
 print(f"TEST -> Elapsed {time.perf_counter() - start:2.4f} seconds.")
 
-# start = time.perf_counter()
-# print(find_my_seat_id("input.txt"))
-# print(f"REAL -> Elapsed {time.perf_counter() - start:2.4f} seconds.")
+start = time.perf_counter()
+print(find_my_seat_id("input.txt"))
+print(f"REAL -> Elapsed {time.perf_counter() - start:2.4f} seconds.")
