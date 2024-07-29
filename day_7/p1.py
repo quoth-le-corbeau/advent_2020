@@ -4,7 +4,7 @@ import pathlib
 _SHINY_GOLD = "shiny gold bag"
 
 
-def get_number_of_shiny_gold_bag_holders(file_path: str):
+def get_number_of_shiny_gold_bag_holders(file_path: str) -> int:
     rules = _get_bag_holding_rules(file=file_path)
     print(f"{rules=}")
     count = 0
@@ -14,8 +14,12 @@ def get_number_of_shiny_gold_bag_holders(file_path: str):
             bags_containing_gold.append(color)
             count += 1
     print(f"{bags_containing_gold=}")
+    visited = list()
     for bag in bags_containing_gold:
-        count += list(rules.keys()).count(bag)
+        for color, contains in rules.items():
+            if any(bag in contents for contents in contains) and color not in visited:
+                count += 1
+                visited.append(color)
     return count
 
 
@@ -24,7 +28,12 @@ def _get_bag_holding_rules(file: str):
         lines = puzzle_input.read().splitlines()
         rules_by_bag = dict()
         for line in lines:
-            line = line.replace(" contain", ",").replace(".", "").replace("bags", "bag")
+            line = (
+                line.replace(" contain", ",")
+                .replace(".", "")
+                .replace("bags", "bag")
+                .replace(", ", ",")
+            )
             split_line = line.split(",")
             rules_by_bag[split_line[0]] = split_line[1:]
         return rules_by_bag
