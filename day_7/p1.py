@@ -1,3 +1,4 @@
+from typing import List, Dict
 import time
 import pathlib
 
@@ -6,24 +7,26 @@ _SHINY_GOLD = "shiny gold bag"
 
 def get_number_of_shiny_gold_bag_holders(file_path: str) -> int:
     rules = _get_bag_holding_rules(file=file_path)
-    print(f"{rules=}")
     count = 0
-    bags_containing_gold = list()
+    bags_containing_gold = set()
     for color, contains in rules.items():
         if any(_SHINY_GOLD in contents for contents in contains):
-            bags_containing_gold.append(color)
+            bags_containing_gold.add(color)
             count += 1
-    print(f"{bags_containing_gold=}")
-    visited = list()
-    for bag in bags_containing_gold:
+
+    while len(bags_containing_gold) > 0:
+        target_content = bags_containing_gold.pop()
         for color, contains in rules.items():
-            if any(bag in contents for contents in contains) and color not in visited:
-                count += 1
-                visited.append(color)
+            if any(target_content in contents for contents in contains):
+                current_length = len(bags_containing_gold)
+                bags_containing_gold.add(color)
+                new_length = len(bags_containing_gold)
+                count += new_length - current_length
+
     return count
 
 
-def _get_bag_holding_rules(file: str):
+def _get_bag_holding_rules(file: str) -> Dict[str, List[str]]:
     with open(pathlib.Path(__file__).parent / file, "r") as puzzle_input:
         lines = puzzle_input.read().splitlines()
         rules_by_bag = dict()
